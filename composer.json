@@ -1,0 +1,25 @@
+{
+  "name": "keystore-api/keystore-client-php",
+  "type": "library",
+  "keywords": [
+    "http",
+    "rest",
+    "client"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.6",
+    "guzzlehttp/guzzle": "^6.5",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "keystore\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "keystore\\tests\\": "tests/"
+    }
+  }
+}
