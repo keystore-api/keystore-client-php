@@ -94,6 +94,7 @@ $params = new ProductSearchParams();
 $params
     ->setCategoryId(1)
     ->setName("Name")
+    ->setPage(2) // Установка страницы (пагинация)
     ->setPerPage(100);
 
 $service = KeystoreClientFactory::create($key);
