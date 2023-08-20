@@ -18,6 +18,11 @@ class PaginationParams extends AbstractRequestParams
     private $perPage;
 
     /**
+     * @var int|null
+     */
+    private $page;
+
+    /**
      * @param int|null $perPage
      * @return PaginationParams
      */
@@ -31,14 +36,22 @@ class PaginationParams extends AbstractRequestParams
         return $this;
     }
 
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
     public function toArray()
     {
-        if ($this->perPage !== null) {
+        if ($this->perPage !== null  || $this->page !== null) {
             return array_merge(parent::toArray(), [
                 'per-page' => $this->perPage,
+                'page' => $this->page,
             ]);
         }
 
