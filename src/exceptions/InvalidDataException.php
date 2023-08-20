@@ -3,7 +3,7 @@
 namespace keystore\exceptions;
 
 
-use Throwable;
+use Exception;
 
 /**
  * Ошибка параметров
@@ -21,7 +21,7 @@ class InvalidDataException extends AbstractKeystoreException
     /**
      * @inheritDoc
      */
-    public function __construct($errors = [], $code = 0, Throwable $previous = null)
+    public function __construct($errors = [], $code = 0, Exception $previous = null)
     {
         parent::__construct("Unprocessable Entity", "", $code, 422, $previous);
         $this->errors = $errors;

@@ -5,7 +5,7 @@ namespace keystore\exceptions;
 use keystore\contracts\ArraySerializer;
 use keystore\contracts\KeystoreExceptionInterface;
 use RuntimeException;
-use Throwable;
+use Exception;
 
 /**
  * Общий класс исключения
@@ -33,7 +33,7 @@ abstract class AbstractKeystoreException extends RuntimeException implements Key
         $message = "",
         $code = 0,
         $status = 0,
-        Throwable $previous = null
+        Exception $previous = null
     )
     {
         parent::__construct($message, $code, $previous);
