@@ -87,13 +87,15 @@ $result = $service->productList();
 
 #### С использованием параметров поиска
 
+⚠️ Для большинства сценариев использования, рекомендуем получать только активные товары, используя метод `setOnlyInStock(true)`. 
+
 ```php
 ...
 
 $params = new ProductSearchParams();
 $params
     ->setCategoryId(1)
-    ->setName("Name")
+    ->setOnlyInStock(true) // Только товары в наличие
     ->setPage(2) // Установка страницы (пагинация)
     ->setPerPage(100);
 
