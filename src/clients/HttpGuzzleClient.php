@@ -16,21 +16,19 @@ use keystore\contracts\HttpClientInterface;
  */
 class HttpGuzzleClient extends Client implements HttpClientInterface
 {
-    /** @var */
-    public static $baseUrl;
-
     /**
      * @var string
      */
     private $authKey;
 
     /**
+     * @param $baseUrl
      * @inheritDoc
      */
-    public function __construct(array $config = [])
+    public function __construct($baseUrl, array $config = [])
     {
         $config = array_merge($config, [
-            'base_uri' => self::$baseUrl,
+            'base_uri' => $baseUrl,
             'verify' => false,
             'headers' => [
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'

@@ -9,7 +9,7 @@ namespace keystore\contracts;
  * Class OrderCreatedInterface
  * @package keystore\contract
  */
-interface OrderCreatedInterface extends ResultInterface
+interface OrderCreatedInterface extends ResultInterface, OrderDownloadInterface
 {
     /** @var string */
     const STATUS_OK = 'ok';
@@ -30,13 +30,6 @@ interface OrderCreatedInterface extends ResultInterface
      * @return int
      */
     public function getId();
-
-    /**
-     * Ссылка на загрузку товара
-     *
-     * @return string|null
-     */
-    public function getLink();
 
     /**
      * Заказ создан

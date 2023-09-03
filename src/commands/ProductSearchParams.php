@@ -117,25 +117,25 @@ class ProductSearchParams extends PaginationParams
     }
 
     /**
-     * @param bool|null $onlyInStock
+     * @param bool|int $onlyInStock
      * @return ProductSearchParams
      */
     public function setOnlyInStock($onlyInStock)
     {
-        Assert::boolean("Only In Stock", $onlyInStock);
-        $this->onlyInStock = $onlyInStock;
+        Assert::unStrictBoolean("Only In Stock", $onlyInStock);
+        $this->onlyInStock = (bool)$onlyInStock;
 
         return $this;
     }
 
     /**
-     * @param bool|null $onlyExclusive
+     * @param bool|int $onlyExclusive
      * @return ProductSearchParams
      */
     public function setOnlyExclusive($onlyExclusive)
     {
-        Assert::boolean("Only Exclusive", $onlyExclusive);
-        $this->onlyExclusive = $onlyExclusive;
+        Assert::unStrictBoolean("Only Exclusive", $onlyExclusive);
+        $this->onlyExclusive = (bool)$onlyExclusive;
 
         return $this;
     }

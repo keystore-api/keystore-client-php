@@ -29,6 +29,7 @@ use keystore\contracts\UserBalanceInterface;
  * @method UserBalanceInterface userBalance() Просмотр баланса
  * @method OrderCreatedInterface orderCreate(OrderCreateParams $params) Создание заказа
  * @method OrderDetailInterface orderDownload(int $id) Просмотр заказа
+ * @method OrderCreatedInterface|OrderDetailInterface awaitOrderCreate(OrderCreateParams $params) Создание заказа с возможностью просмотра
  */
 class KeystoreClient
 {
@@ -55,6 +56,8 @@ class KeystoreClient
      */
     public function __call($name, $arguments)
     {
-        return $this->apiProvider->$name(...$arguments);
+        return $this
+            ->apiProvider
+            ->$name(...$arguments);
     }
 }

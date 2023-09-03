@@ -79,6 +79,23 @@ class Assert
     }
 
     /**
+     * Не строгое логическое
+     *
+     * @param $attribute
+     * @param $value
+     * @return void
+     */
+    public static function unStrictBoolean($attribute, $value)
+    {
+        if (
+            is_bool($value) === false &&
+            in_array($value, [0, 1]) === false
+        ) {
+            throw new InvalidArgumentException("$attribute must be a boolean or integer (1 or 0)");
+        }
+    }
+
+    /**
      * Строка
      *
      * @param $attribute

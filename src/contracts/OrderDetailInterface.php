@@ -8,10 +8,6 @@ namespace keystore\contracts;
  * Class OrderDetailInterface
  * @package keystore\contract
  */
-interface OrderDetailInterface extends ResultInterface
+interface OrderDetailInterface extends ResultInterface, OrderDownloadInterface
 {
-    /**
-     * @return string
-     */
-    public function getLink();
 }

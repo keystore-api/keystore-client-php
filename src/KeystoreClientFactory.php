@@ -25,13 +25,14 @@ class KeystoreClientFactory
     /**
      * Упрощенное создание клиента на основе HTTP поставщика данных
      *
+     * @param string $baseUrl
      * @param string $key
      * @return KeystoreClient
      */
-    public static function create($key)
+    public static function create($baseUrl, $key)
     {
         $auth = new AuthApiKey($key);
-        $client = new HttpGuzzleClient();
+        $client = new HttpGuzzleClient($baseUrl);
 
         return self::http($client, $auth);
     }

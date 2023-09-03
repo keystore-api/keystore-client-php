@@ -48,7 +48,8 @@ class ProductTest extends TestCase
                   "id": 28,
                   "name": "Steam",
                   "icon": "http://mock/media/no-miniature.png"
-                }
+                },
+                "url": "http://mock/products/view/quis-et-illum-velit"
               }
             ],
             "_links": {
@@ -99,6 +100,7 @@ class ProductTest extends TestCase
         $this->assertEquals(0, $result->getItems()[0]->getView());
         $this->assertInstanceOf(GroupItem::class, $result->getItems()[0]->getGroup());
         $this->assertInstanceOf(CategoryItem::class, $result->getItems()[0]->getCategory());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getItems()[0]->getUrl());
     }
 
     /**
@@ -130,7 +132,8 @@ class ProductTest extends TestCase
                             "id": 5,
                             "name": "Steam",
                             "icon": "http://mock/media/no-miniature.png"
-                        }
+                        },
+                        "url": "http://mock/products/view/quis-et-illum-velit"
                     }
                 ],
                 "_links": {
@@ -178,6 +181,7 @@ class ProductTest extends TestCase
         $this->assertEquals(5, $result->getItems()[0]->getView());
         $this->assertInstanceOf(GroupItem::class, $result->getItems()[0]->getGroup());
         $this->assertInstanceOf(CategoryItem::class, $result->getItems()[0]->getCategory());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getItems()[0]->getUrl());
     }
 
     /**
@@ -207,7 +211,8 @@ class ProductTest extends TestCase
                 "id": 28,
                 "name": "Steam",
                 "icon": "http://mock/media/no-miniature.png"
-              }
+              },
+              "url": "http://mock/products/view/quis-et-illum-velit"
             }
         }';
         $mockClient = $this
@@ -230,5 +235,6 @@ class ProductTest extends TestCase
         $this->assertEquals(2, $result->getMinimumOrder());
         $this->assertInstanceOf(GroupItem::class, $result->getGroup());
         $this->assertInstanceOf(CategoryItem::class, $result->getCategory());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getUrl());
     }
 }

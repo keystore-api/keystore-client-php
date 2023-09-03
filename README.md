@@ -22,13 +22,12 @@ Keystore API Client
 
 ```php
 $key = '<secret>';
+$baseUrl = 'https://<domain>';
 
-// Установка базового адреса
-HttpGuzzleClient::$baseUrl = 'https://base.url';
 // Создание объекта аутентификации
 $auth = new AuthApiKey($key);
 // Создание HTTP клиента
-$client = new HttpGuzzleClient();
+$client = new HttpGuzzleClient($baseUrl);
 // Создание HTTP провайдера данных
 $provider = new HttpApiProvider($httpClient, $auth);
 // Создание сервиса
@@ -39,9 +38,10 @@ $service = new KeystoreClient($provider);
 
 ```php
 $key = '<secret>';
+$baseUrl = 'https://<domain>';
 
 // Создание сервиса
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 ```
 
 ### Список категорий
@@ -49,7 +49,7 @@ $service = KeystoreClientFactory::create($key);
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->categoryList();
 ```
 
@@ -58,7 +58,7 @@ $result = $service->categoryList();
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->groupList();
 ```
 
@@ -72,7 +72,7 @@ $params
     ->setCategoryId(1)
     ->setPerPage(100);
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->groupList($params);
 ```
 
@@ -81,13 +81,14 @@ $result = $service->groupList($params);
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->productList();
 ```
 
 #### С использованием параметров поиска
 
-⚠️ Для большинства сценариев использования, рекомендуем получать только активные товары, используя метод `setOnlyInStock(true)`. 
+⚠️ Для большинства сценариев использования, рекомендуем получать только активные товары, используя
+метод `setOnlyInStock(true)`.
 
 ```php
 ...
@@ -99,8 +100,38 @@ $params
     ->setPage(2) // Установка страницы (пагинация)
     ->setPerPage(100);
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->productList($params);
+```
+
+#### Пример получения всех товаров
+```php
+...
+
+$service = KeystoreClientFactory::create($baseUrl, $key);
+$params = new ProductSearchParams();
+$params
+    ->setOnlyInStock(true)
+    ->setOnlyExclusive(true)
+    ->setPerPage(500);
+
+$currentPage = 1;
+$allItems = [];
+
+do {
+    $params->setPage($currentPage);
+    $result = $service->productList($params);
+    $meta = $result->getMeta();
+
+    // Добавляем продукты с текущей страницы в общий список
+    $allItems = array_merge($allItems, $result->getItems());
+    $currentPage++;
+
+    // Если это не последний запрос, добавляем задержку в 0.5 секунды перед следующим запросом
+    if ($currentPage <= $meta->getPageCount()) {
+        usleep(500000);
+    }
+} while ($currentPage <= $meta->getPageCount());
 ```
 
 ### Просмотр товара
@@ -108,7 +139,7 @@ $result = $service->productList($params);
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->productView(1);
 ```
 
@@ -117,7 +148,7 @@ $result = $service->productView(1);
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->productTopList();
 ```
 
@@ -126,7 +157,7 @@ $result = $service->productTopList();
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->userBalance();
 ```
 
@@ -137,7 +168,7 @@ $result = $service->userBalance();
 
 $params = new OrderCreateParams(1, 5);
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->orderCreate($params);
 ```
 
@@ -146,35 +177,52 @@ $result = $service->orderCreate($params);
 ```php
 ...
 
-$service = KeystoreClientFactory::create($key);
+$service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->orderDownload(1);
+```
+
+### Создание и получение информации по заказу
+
+```php
+...
+
+$params = new OrderCreateParams(1, 5);
+
+// Создание заказа и получение информации о нем
+// В ответ возвращается один из объектов:
+// OrderCreatedInterface - если заказ создан, но не обработан (имеет статус PENDING)
+// OrderDetailInterface - если заказ создан и обработан (имеет статус OK)
+$service = KeystoreClientFactory::create($baseUrl, $key);
+$result = $service->awaitOrderCreate($params);
 ```
 
 Данные ответа
 -----
 
-| Модель           | Экземпляр класса       | 
-|------------------|------------------------|
-| Список категорий | CategoryListInterface  |
-| Список групп     | GroupListInterface     |
-| Список товаров   | ProductListInterface   |
-| Просмотр товара  | ProductDetailInterface |
-| Топ-100 товаров  | ProductListInterface   |
-| Просмотр баланса | UserBalanceInterface   |
-| Создание заказа  | OrderCreatedInterface  |
-| Просмотр заказа  | OrderDetailInterface   |
+| Модель            | Экземпляр класса                              | 
+|-------------------|-----------------------------------------------|
+| Список категорий  | CategoryListInterface                         |
+| Список групп      | GroupListInterface                            |
+| Список товаров    | ProductListInterface                          |
+| Просмотр товара   | ProductDetailInterface                        |
+| Топ-100 товаров   | ProductListInterface                          |
+| Просмотр баланса  | UserBalanceInterface                          |
+| Создание заказа   | OrderCreatedInterface                         |
+| Просмотр заказа   | OrderDetailInterface                          |
+| Создание и получение информации по заказу   | OrderDetailInterface OrderCreatedInterface OrderDownloadInterface |
 
 Обработка ошибок
 -----
 
 ### Исключения
 
-| Модель                     | Экземпляр класса           | 
-|----------------------------|----------------------------|
-| Интерфейс всех исключений  | KeystoreExceptionInterface |
+| Модель                    | Экземпляр класса           | 
+|---------------------------|----------------------------|
+| Интерфейс всех исключений | KeystoreExceptionInterface |
 | Ошибка передаваемых данных | InvalidDataException       |
-| Ошибка авторизации         | UnauthorizedException      |
-| Ошибка запроса             | BadRequestException        |
+| Ошибка авторизации        | UnauthorizedException      |
+| Ошибка запроса            | BadRequestException        |
+| Ресурс не найден   | NotFoundException        |
 
 HTTP клиент
 -----

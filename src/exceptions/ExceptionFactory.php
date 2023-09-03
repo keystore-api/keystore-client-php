@@ -30,6 +30,8 @@ class ExceptionFactory
                 return UnauthorizedException::fromArray($data);
             case 400:
                 return BadRequestException::fromArray($data);
+            case 404:
+                return NotFoundException::fromArray($data);
             case 422:
             default:
                 return InvalidDataException::fromArray($data);

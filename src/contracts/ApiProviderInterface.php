@@ -77,4 +77,12 @@ interface ApiProviderInterface
      * @return OrderDetailInterface
      */
     public function orderDownload($id);
+
+    /**
+     * Создание заказа с возможностью просмотра
+     *
+     * @param OrderCreateParams $params
+     * @return OrderCreatedInterface|OrderDetailInterface|OrderDownloadInterface
+     */
+    public function awaitOrderCreate(OrderCreateParams $params);
 }

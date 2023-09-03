@@ -11,6 +11,7 @@ use keystore\contracts\ApiProviderInterface;
 use keystore\contracts\AuthCredentialsInterface;
 use keystore\contracts\HttpClientInterface;
 use keystore\exceptions\AbstractKeystoreException;
+use keystore\helpers\AwaitOrderCreate;
 use keystore\http\CategoryListResponse;
 use keystore\http\GroupListResponse;
 use keystore\http\HttpResponseFactory;
@@ -158,5 +159,14 @@ class HttpApiProvider implements ApiProviderInterface
         return HttpResponseFactory::fromArray(static function (array $data) {
             return OrderDetailResponse::fromArray($data);
         }, $data);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws AbstractKeystoreException
+     */
+    public function awaitOrderCreate(OrderCreateParams $params)
+    {
+        return (new AwaitOrderCreate($this))->createByParams($params);
     }
 }

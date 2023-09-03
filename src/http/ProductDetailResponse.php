@@ -75,6 +75,11 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     protected $category;
 
     /**
+     * @var string
+     */
+    protected $url;
+
+    /**
      * @return int
      */
     public function getId()
@@ -200,5 +205,13 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     protected function setPurchaseCounter($value)
     {
         $this->purchaseCounter = $value ?: 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }

@@ -60,13 +60,13 @@ class OrderCreateParams extends AbstractRequestParams
     }
 
     /**
-     * @param bool $sendEmailCopy
+     * @param bool|int $sendEmailCopy
      * @return OrderCreateParams
      */
     public function setSendEmailCopy($sendEmailCopy)
     {
-        Assert::boolean("Send Email Copy", $sendEmailCopy);
-        $this->sendEmailCopy = $sendEmailCopy;
+        Assert::unStrictBoolean("Send Email Copy", $sendEmailCopy);
+        $this->sendEmailCopy = (bool)$sendEmailCopy;
 
         return $this;
     }
