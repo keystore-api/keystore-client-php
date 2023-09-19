@@ -233,7 +233,7 @@ HTTP клиент
 
 ```php
 // Создание своего HTTP клиента
-class MyHTTPClient impliments HttpClientInterface
+class MyHTTPClient implements HttpClientInterface
 {
     ...
 }
@@ -248,7 +248,7 @@ $service = KeystoreClientFactory::http($httpClient, $auth);
 
 ```php
 // Создание своего провайдера
-class MyProvider impliments ApiProviderInterface
+class MyProvider implements ApiProviderInterface
 {
     ...
 }
