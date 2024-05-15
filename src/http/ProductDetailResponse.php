@@ -80,6 +80,11 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     protected $url;
 
     /**
+     * @var array
+     */
+    protected $attributes;
+
+    /**
      * @return int
      */
     public function getId()
@@ -214,4 +219,21 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     {
         return $this->url;
     }
+
+    /**
+     * @param array $value
+     */
+    protected function setAttributes($value)
+    {
+        $this->attributes = $value;
+    }
+
+    /***
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
 }

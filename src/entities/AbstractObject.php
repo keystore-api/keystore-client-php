@@ -17,7 +17,7 @@ abstract class AbstractObject implements ArraySerializer
      */
     public function __construct(array $data = [])
     {
-        $this->setAttributes($data);
+        $this->_setProperties($data);
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class AbstractObject implements ArraySerializer
      * @param $value
      * @return void
      */
-    private function setAttribute($attribute, $value)
+    private function _setProperty($attribute, $value)
     {
         $attribute = ucwords(str_replace('_', ' ', $attribute));
         $attribute = str_replace(' ', '', $attribute);
@@ -51,7 +51,7 @@ abstract class AbstractObject implements ArraySerializer
         } elseif (property_exists($this, $attribute) === true) {
             $this->$attribute = $value;
         } elseif (is_array($value) === true) {
-            $this->setAttributes($value);
+            $this->_setProperties($value);
         }
     }
 
@@ -61,10 +61,10 @@ abstract class AbstractObject implements ArraySerializer
      * @param array $attributes
      * @return void
      */
-    private function setAttributes($attributes)
+    private function _setProperties($attributes)
     {
         foreach ($attributes as $attribute => $value) {
-            $this->setAttribute($attribute, $value);
+            $this->_setProperty($attribute, $value);
         }
     }
 }

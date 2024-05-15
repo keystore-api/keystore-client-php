@@ -72,4 +72,11 @@ interface ProductDetailInterface extends ResultInterface
      * @return CategoryItem
      */
     public function getCategory();
+
+    /***
+     * @return array
+     */
+    public function getAttributes();
+
+
 }
