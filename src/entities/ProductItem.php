@@ -76,6 +76,11 @@ class ProductItem extends AbstractObject
     protected $url;
 
     /**
+     * @var array
+     */
+    protected $attributes;
+
+    /**
      * @return int
      */
     public function getId()
@@ -210,4 +215,22 @@ class ProductItem extends AbstractObject
     {
         return $this->url;
     }
+
+
+    /**
+     * @param array $value
+     */
+    protected function setAttributes($value)
+    {
+        $this->attributes = $value;
+    }
+
+    /***
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
 }
