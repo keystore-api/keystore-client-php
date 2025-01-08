@@ -71,6 +71,14 @@ interface ApiProviderInterface
     public function orderCreate(OrderCreateParams $params);
 
     /**
+     * Получение статуса заказа
+     *
+     * @param int $id
+     * @return OrderStatusInterface
+     */
+    public function orderStatus($id);
+
+    /**
      * Просмотр заказа
      *
      * @param int $id

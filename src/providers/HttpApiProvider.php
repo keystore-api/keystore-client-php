@@ -10,6 +10,7 @@ use keystore\commands\ProductSearchParams;
 use keystore\contracts\ApiProviderInterface;
 use keystore\contracts\AuthCredentialsInterface;
 use keystore\contracts\HttpClientInterface;
+use keystore\contracts\OrderStatusInterface;
 use keystore\exceptions\AbstractKeystoreException;
 use keystore\helpers\AwaitOrderCreate;
 use keystore\http\CategoryListResponse;
@@ -17,6 +18,7 @@ use keystore\http\GroupListResponse;
 use keystore\http\HttpResponseFactory;
 use keystore\http\OrderCreatedResponse;
 use keystore\http\OrderDetailResponse;
+use keystore\http\OrderStatusResponse;
 use keystore\http\ProductDetailResponse;
 use keystore\http\ProductListResponse;
 use keystore\http\UserBalanceResponse;
@@ -143,6 +145,21 @@ class HttpApiProvider implements ApiProviderInterface
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return OrderCreatedResponse::fromArray($data);
+        }, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function orderStatus($id)
+    {
+        $url = '/api/v1/order/status';
+        $data = $this->client->sendData($url, [
+            'id' => $id,
+        ]);
+
+        return HttpResponseFactory::fromArray(static function (array $data) {
+            return OrderStatusResponse::fromArray($data);
         }, $data);
     }
 

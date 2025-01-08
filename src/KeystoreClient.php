@@ -11,6 +11,7 @@ use keystore\contracts\CategoryListInterface;
 use keystore\contracts\GroupListInterface;
 use keystore\contracts\OrderCreatedInterface;
 use keystore\contracts\OrderDetailInterface;
+use keystore\contracts\OrderStatusInterface;
 use keystore\contracts\ProductDetailInterface;
 use keystore\contracts\ProductListInterface;
 use keystore\contracts\UserBalanceInterface;
@@ -29,6 +30,7 @@ use keystore\contracts\UserBalanceInterface;
  * @method UserBalanceInterface userBalance() Просмотр баланса
  * @method OrderCreatedInterface orderCreate(OrderCreateParams $params) Создание заказа
  * @method OrderDetailInterface orderDownload(int $id) Просмотр заказа
+ * @method OrderStatusInterface orderStatus(int $id) Получение статуса заказа
  * @method OrderCreatedInterface|OrderDetailInterface awaitOrderCreate(OrderCreateParams $params) Создание заказа с возможностью просмотра
  */
 class KeystoreClient

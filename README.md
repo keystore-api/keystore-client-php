@@ -172,6 +172,26 @@ $service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->orderCreate($params);
 ```
 
+### Получение статуса заказа
+
+```php
+...
+
+$service = KeystoreClientFactory::create($baseUrl, $key);
+$result = $service->orderStatus(1);
+```
+
+**Возможные статусы заказа:**
+
+| Статус     | Описание                                    |
+|------------|---------------------------------------------|
+| unpaid     | Заказ создан, но не оплачен                 |
+| in_process | Заказ в процессе обработки                  |
+| completed  | Заказ завершен                              |
+| canceled   | Заказ отменен                               |
+| error      | Произошла ошибка во время выполнения заказа |
+| refund     | По заказу совершен возврат средств          |
+
 ### Просмотр заказа
 
 ```php
@@ -199,17 +219,18 @@ $result = $service->awaitOrderCreate($params);
 Данные ответа
 -----
 
-| Модель            | Экземпляр класса                              | 
-|-------------------|-----------------------------------------------|
-| Список категорий  | CategoryListInterface                         |
-| Список групп      | GroupListInterface                            |
-| Список товаров    | ProductListInterface                          |
-| Просмотр товара   | ProductDetailInterface                        |
-| Топ-100 товаров   | ProductListInterface                          |
-| Просмотр баланса  | UserBalanceInterface                          |
-| Создание заказа   | OrderCreatedInterface                         |
-| Просмотр заказа   | OrderDetailInterface                          |
-| Создание и получение информации по заказу   | OrderDetailInterface OrderCreatedInterface OrderDownloadInterface |
+| Модель                                    | Экземпляр класса                                                  | 
+|-------------------------------------------|-------------------------------------------------------------------|
+| Список категорий                          | CategoryListInterface                                             |
+| Список групп                              | GroupListInterface                                                |
+| Список товаров                            | ProductListInterface                                              |
+| Просмотр товара                           | ProductDetailInterface                                            |
+| Топ-100 товаров                           | ProductListInterface                                              |
+| Просмотр баланса                          | UserBalanceInterface                                              |
+| Создание заказа                           | OrderCreatedInterface                                             |
+| Статус заказа                             | OrderStatusInterface                                              |
+| Просмотр заказа                           | OrderDetailInterface                                              |
+| Создание и получение информации по заказу | OrderDetailInterface OrderCreatedInterface OrderDownloadInterface |
 
 Обработка ошибок
 -----
