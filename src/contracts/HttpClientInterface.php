@@ -22,11 +22,20 @@ interface HttpClientInterface
     public function setAuth(AuthCredentialsInterface $credentials);
 
     /**
+     * Отправка POST запроса
+     *
+     * @param $uri
+     * @param AbstractRequestParams|array|null $params
+     * @return array
+     */
+    public function sendPost($uri, $params = null);
+
+    /**
      * Отправка GET запроса
      *
      * @param $uri
      * @param AbstractRequestParams|array|null $params
      * @return array
      */
-    public function sendData($uri, $params = null);
+    public function sendGet($uri, $params = null);
 }

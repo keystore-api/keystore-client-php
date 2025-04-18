@@ -41,6 +41,11 @@ class ProductItem extends AbstractObject
     protected $price;
 
     /**
+     * @var float
+     */
+    protected $rating;
+
+    /**
      * @var int
      */
     protected $minimumOrder;
@@ -76,7 +81,27 @@ class ProductItem extends AbstractObject
     protected $url;
 
     /**
-     * @var array
+     * @var string
+     */
+    protected $replacementTermsPublic;
+
+    /**
+     * @var int
+     */
+    protected $isManualOrderDelivery;
+
+    /**
+     * @var int
+     */
+    protected $guaranteeTimeSeconds;
+
+    /**
+     * @var int|null
+     */
+    protected $invalid_items_percent;
+
+    /**
+     * @var ProductAttributeValue[]
      */
     protected $attributes;
 
@@ -129,6 +154,14 @@ class ProductItem extends AbstractObject
     }
 
     /**
+     * @return float
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
      * @return int
      */
     public function getMinimumOrder()
@@ -158,6 +191,22 @@ class ProductItem extends AbstractObject
     public function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsManualOrderDelivery()
+    {
+        return $this->isManualOrderDelivery;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGuaranteeTimeSeconds()
+    {
+        return $this->guaranteeTimeSeconds;
     }
 
     /**
@@ -201,6 +250,14 @@ class ProductItem extends AbstractObject
     }
 
     /**
+     * @param string|float $value
+     */
+    protected function setRating($value)
+    {
+        $this->rating = (float)$value;
+    }
+
+    /**
      * @param int|null $value
      */
     protected function setPurchaseCounter($value)
@@ -222,15 +279,71 @@ class ProductItem extends AbstractObject
      */
     protected function setAttributes($value)
     {
-        $this->attributes = $value;
+        $this->attributes = array_map(
+            /**
+             * @param array $attributeValue
+             */
+            static function($attributeValue){
+                return ProductAttributeValue::fromArray($attributeValue);
+            },
+            $value
+        );
     }
 
-    /***
-     * @return array
+    /**
+     * @return ProductAttributeValue[]
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param int|null $value
+     */
+    public function setIsManualOrderDelivery($value)
+    {
+        $this->isManualOrderDelivery = $value;
+    }
+
+    /**
+     * @param int|null $value
+     */
+    public function setGuaranteeTimeSeconds($value)
+    {
+        $this->guaranteeTimeSeconds = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplacementTermsPublic()
+    {
+        return $this->replacementTermsPublic;
+    }
+
+    /**
+     * @param string $replacementTermsPublic
+     */
+    public function setReplacementTermsPublic($replacementTermsPublic)
+    {
+        $this->replacementTermsPublic = $replacementTermsPublic;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getInvalidItemsPercent()
+    {
+        return $this->invalid_items_percent;
+    }
+
+    /**
+     * @param int|null $invalid_items_percent
+     */
+    public function setInvalidItemsPercent($invalid_items_percent)
+    {
+        $this->invalid_items_percent = $invalid_items_percent;
     }
 
 }

@@ -3,8 +3,10 @@
 namespace keystore\http;
 
 use keystore\contracts\ProductDetailInterface;
+use keystore\entities\AttributeItem;
 use keystore\entities\CategoryItem;
 use keystore\entities\GroupItem;
+use keystore\entities\ProductAttributeValue;
 
 /**
  * @inheritDoc
@@ -45,6 +47,11 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     protected $price;
 
     /**
+     * @var float
+     */
+    protected $rating;
+
+    /**
      * @var int
      */
     protected $minimumOrder;
@@ -80,7 +87,27 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     protected $url;
 
     /**
-     * @var array
+     * @var int
+     */
+    protected $isManualOrderDelivery;
+
+    /**
+     * @var int
+     */
+    protected $guaranteeTimeSeconds;
+
+    /**
+     * @var int|null
+     */
+    protected $invalid_items_percent;
+
+    /**
+     * @var string
+     */
+    protected $replacementTermsPublic;
+
+    /**
+     * @var ProductAttributeValue[]
      */
     protected $attributes;
 
@@ -133,6 +160,14 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     }
 
     /**
+     * @return float
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
      * @return int
      */
     public function getMinimumOrder()
@@ -162,6 +197,22 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     public function getView()
     {
         return $this->view;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsManualOrderDelivery()
+    {
+        return $this->isManualOrderDelivery;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGuaranteeTimeSeconds()
+    {
+        return $this->guaranteeTimeSeconds;
     }
 
     /**
@@ -205,6 +256,14 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     }
 
     /**
+     * @param string|float $value
+     */
+    protected function setRating($value)
+    {
+        $this->rating = (float)$value;
+    }
+
+    /**
      * @param int|null $value
      */
     protected function setPurchaseCounter($value)
@@ -221,19 +280,58 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
     }
 
     /**
-     * @param array $value
+     * @param AttributeItem[] $value
      */
     protected function setAttributes($value)
     {
         $this->attributes = $value;
     }
 
-    /***
-     * @return array
+    /**
+     * @return ProductAttributeValue[]
      */
     public function getAttributes()
     {
         return $this->attributes;
     }
 
+    /**
+     * @param int|null $value
+     */
+    public function setIsManualOrderDelivery($value)
+    {
+        $this->isManualOrderDelivery = $value;
+    }
+
+    /**
+     * @param int|null $value
+     */
+    public function setGuaranteeTimeSeconds($value)
+    {
+        $this->guaranteeTimeSeconds = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplacementTermsPublic()
+    {
+        return $this->replacementTermsPublic;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getInvalidItemsPercent()
+    {
+        return $this->invalid_items_percent;
+    }
+
+    /**
+     * @param int|null $invalid_items_percent
+     */
+    public function setInvalidItemsPercent($invalid_items_percent)
+    {
+        $this->invalid_items_percent = $invalid_items_percent;
+    }
 }

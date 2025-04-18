@@ -10,9 +10,10 @@ use keystore\commands\ProductSearchParams;
 use keystore\contracts\ApiProviderInterface;
 use keystore\contracts\AuthCredentialsInterface;
 use keystore\contracts\HttpClientInterface;
-use keystore\contracts\OrderStatusInterface;
 use keystore\exceptions\AbstractKeystoreException;
+use keystore\helpers\Assert;
 use keystore\helpers\AwaitOrderCreate;
+use keystore\http\AttributeListResponse;
 use keystore\http\CategoryListResponse;
 use keystore\http\GroupListResponse;
 use keystore\http\HttpResponseFactory;
@@ -56,7 +57,7 @@ class HttpApiProvider implements ApiProviderInterface
     public function categoryList(PaginationParams $params = null)
     {
         $url = '/api/v1/category/list';
-        $data = $this->client->sendData($url, $params);
+        $data = $this->client->sendGet($url, $params);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return CategoryListResponse::fromArray($data);
@@ -67,10 +68,24 @@ class HttpApiProvider implements ApiProviderInterface
      * @inheritDoc
      * @throws AbstractKeystoreException
      */
+    public function attributeList(PaginationParams $params = null)
+    {
+        $url = '/api/v1/attribute/list';
+        $data = $this->client->sendGet($url, $params);
+
+        return HttpResponseFactory::fromArray(static function (array $data) {
+            return AttributeListResponse::fromArray($data);
+        }, $data);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws AbstractKeystoreException
+     */
     public function groupList(GroupSearchParams $params = null)
     {
         $url = '/api/v1/group/list';
-        $data = $this->client->sendData($url, $params);
+        $data = $this->client->sendGet($url, $params);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return GroupListResponse::fromArray($data);
@@ -84,7 +99,7 @@ class HttpApiProvider implements ApiProviderInterface
     public function productList(ProductSearchParams $params = null)
     {
         $url = '/api/v1/product/list';
-        $data = $this->client->sendData($url, $params);
+        $data = $this->client->sendPost($url, $params);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return ProductListResponse::fromArray($data);
@@ -96,8 +111,9 @@ class HttpApiProvider implements ApiProviderInterface
      */
     public function productView($id)
     {
+        Assert::integer("ID", $id);
         $url = '/api/v1/product/view';
-        $data = $this->client->sendData($url, [
+        $data = $this->client->sendGet($url,[
             'id' => $id,
         ]);
 
@@ -113,7 +129,7 @@ class HttpApiProvider implements ApiProviderInterface
     public function productTopList(PaginationParams $params = null)
     {
         $url = '/api/v1/product/top';
-        $data = $this->client->sendData($url, $params);
+        $data = $this->client->sendGet($url, $params);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return ProductListResponse::fromArray($data);
@@ -127,7 +143,7 @@ class HttpApiProvider implements ApiProviderInterface
     public function userBalance()
     {
         $url = '/api/v1/user/balance';
-        $data = $this->client->sendData($url);
+        $data = $this->client->sendGet($url);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return UserBalanceResponse::fromArray($data);
@@ -141,7 +157,7 @@ class HttpApiProvider implements ApiProviderInterface
     public function orderCreate(OrderCreateParams $params)
     {
         $url = '/api/v1/order/create';
-        $data = $this->client->sendData($url, $params);
+        $data = $this->client->sendGet($url, $params);
 
         return HttpResponseFactory::fromArray(static function (array $data) {
             return OrderCreatedResponse::fromArray($data);
@@ -153,8 +169,9 @@ class HttpApiProvider implements ApiProviderInterface
      */
     public function orderStatus($id)
     {
+        Assert::integer("ID", $id);
         $url = '/api/v1/order/status';
-        $data = $this->client->sendData($url, [
+        $data = $this->client->sendGet($url, [
             'id' => $id,
         ]);
 
@@ -168,8 +185,9 @@ class HttpApiProvider implements ApiProviderInterface
      */
     public function orderDownload($id)
     {
+        Assert::integer("ID", $id);
         $url = '/api/v1/order/download';
-        $data = $this->client->sendData($url, [
+        $data = $this->client->sendGet($url, [
             'id' => $id,
         ]);
 

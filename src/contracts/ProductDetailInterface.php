@@ -2,6 +2,7 @@
 
 namespace keystore\contracts;
 
+use keystore\entities\AttributeItem;
 use keystore\entities\CategoryItem;
 use keystore\entities\GroupItem;
 
@@ -73,10 +74,39 @@ interface ProductDetailInterface extends ResultInterface
      */
     public function getCategory();
 
-    /***
-     * @return array
+    /**
+     * @return AttributeItem[]
      */
     public function getAttributes();
 
+    /**
+     * @return float
+     */
+    public function getRating();
+
+    /**
+     * @return int
+     */
+    public function getIsManualOrderDelivery();
+
+    /**
+     * @return int
+     */
+    public function getGuaranteeTimeSeconds();
+
+    /**
+     * @return string
+     */
+    public function getUrl();
+
+    /**
+     * @return string
+     */
+    public function getReplacementTermsPublic();
+
+    /**
+     * @return int|null
+     */
+    public function getInvalidItemsPercent();
 
 }

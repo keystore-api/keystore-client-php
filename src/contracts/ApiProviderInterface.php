@@ -24,6 +24,14 @@ interface ApiProviderInterface
     public function categoryList(PaginationParams $params = null);
 
     /**
+     * Список атрибутов
+     *
+     * @param PaginationParams|null $params
+     * @return AttributeListInterface
+     */
+    public function attributeList(PaginationParams $params = null);
+
+    /**
      * Список групп
      *
      * @param GroupSearchParams|null $params

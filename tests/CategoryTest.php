@@ -109,7 +109,7 @@ class CategoryTest extends TestCase
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendGet')
             ->willReturn(json_decode($json, true));
 
         $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));

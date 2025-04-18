@@ -48,7 +48,22 @@ class HttpGuzzleClient extends Client implements HttpClientInterface
     /**
      * @inheritDoc
      */
-    public function sendData($uri, $params = null)
+    public function sendPost($uri, $params = null)
+    {
+        $content = $this
+            ->post($uri, [
+                RequestOptions::JSON => self::prepareParams($params),
+            ])
+            ->getBody()
+            ->getContents();
+
+        return json_decode($content, true);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function sendGet($uri, $params = null)
     {
         $content = $this
             ->get($uri, [

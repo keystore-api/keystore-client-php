@@ -7,6 +7,7 @@ use keystore\commands\GroupSearchParams;
 use keystore\commands\OrderCreateParams;
 use keystore\commands\ProductSearchParams;
 use keystore\contracts\ApiProviderInterface;
+use keystore\contracts\AttributeListInterface;
 use keystore\contracts\CategoryListInterface;
 use keystore\contracts\GroupListInterface;
 use keystore\contracts\OrderCreatedInterface;
@@ -23,6 +24,7 @@ use keystore\contracts\UserBalanceInterface;
  * @package keystore
  *
  * @method CategoryListInterface categoryList() Список категорий
+ * @method AttributeListInterface attributeList() Список атрибутов
  * @method GroupListInterface groupList(GroupSearchParams $search = null) Список групп
  * @method ProductListInterface productList(ProductSearchParams $search = null) Список товаров
  * @method ProductDetailInterface productView(int $id) Просмотр товара

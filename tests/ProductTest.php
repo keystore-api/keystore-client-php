@@ -49,7 +49,24 @@ class ProductTest extends TestCase
                   "name": "Steam",
                   "icon": "http://mock/media/no-miniature.png"
                 },
-                "url": "http://mock/products/view/quis-et-illum-velit"
+                "is_manual_order_delivery": 1,
+                "url": "http://mock/products/view/quis-et-illum-velit",
+                "replacement_terms_public": null,
+                "guarantee_time_seconds": 3060,
+                "rating": "3.0",
+                "invalid_items_percent": 2,
+                "attributes": [
+                    {
+                        "attribute_id": 2,
+                        "name": "Требует видео-фиксации",
+                        "value": "Нет"
+                    },
+                    {
+                        "attribute_id": 13,
+                        "name": "Особенности",
+                        "value": "Раскрученные"
+                    }
+                ]
               }
             ],
             "_links": {
@@ -78,7 +95,7 @@ class ProductTest extends TestCase
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendPost')
             ->willReturn(json_decode($json, true));
 
         $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));
@@ -92,15 +109,32 @@ class ProductTest extends TestCase
         $this->assertInstanceOf(PaginationLinks::class, $links);
         $this->assertInstanceOf(PaginationMeta::class, $meta);
         $this->assertEquals(150, $meta->getTotalCount());
-        $this->assertEquals("Iure repudiandae sit et numquam", $result->getItems()[0]->getName());
-        $this->assertEquals(3844, $result->getItems()[0]->getId());
-        $this->assertEquals(123.9, $result->getItems()[0]->getPrice());
-        $this->assertEquals(8816, $result->getItems()[0]->getQuantity());
-        $this->assertEquals(55625, $result->getItems()[0]->getPurchaseCounter());
-        $this->assertEquals(0, $result->getItems()[0]->getView());
-        $this->assertInstanceOf(GroupItem::class, $result->getItems()[0]->getGroup());
-        $this->assertInstanceOf(CategoryItem::class, $result->getItems()[0]->getCategory());
-        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getItems()[0]->getUrl());
+
+        $product = $result->getItems()[0];
+        $this->assertInstanceOf(\keystore\entities\ProductItem::class, $product);
+
+        $this->assertEquals("Iure repudiandae sit et numquam", $product->getName());
+        $this->assertEquals(3844, $product->getId());
+        $this->assertEquals(123.9, $product->getPrice());
+        $this->assertEquals(8816, $product->getQuantity());
+        $this->assertEquals(55625, $product->getPurchaseCounter());
+        $this->assertEquals(0, $product->getView());
+        $this->assertInstanceOf(GroupItem::class, $product->getGroup());
+        $this->assertInstanceOf(CategoryItem::class, $product->getCategory());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $product->getUrl());
+        $this->assertEquals(1, $product->getIsManualOrderDelivery());
+        $this->assertEquals(3060, $product->getGuaranteeTimeSeconds());
+        $this->assertEquals(3.0, $product->getRating());
+        $this->assertEquals(2, $product->getInvalidItemsPercent());
+        $this->assertNull($product->getReplacementTermsPublic());
+
+        $attributes = $product->getAttributes();
+        $this->assertContainsOnlyInstancesOf(\keystore\entities\ProductAttributeValue::class, $attributes);
+
+        $attribute = $attributes[0];
+        $this->assertEquals(2, $attribute->getAttributeId());
+        $this->assertEquals('Требует видео-фиксации', $attribute->getName());
+        $this->assertEquals('Нет', $attribute->getValue());
     }
 
     /**
@@ -133,7 +167,24 @@ class ProductTest extends TestCase
                             "name": "Steam",
                             "icon": "http://mock/media/no-miniature.png"
                         },
-                        "url": "http://mock/products/view/quis-et-illum-velit"
+                        "is_manual_order_delivery": 0,
+                        "url": "http://mock/products/view/quis-et-illum-velit",
+                        "replacement_terms_public": null,
+                        "guarantee_time_seconds": 3060,
+                        "rating": "3.0",
+                        "invalid_items_percent": 4,
+                        "attributes": [
+                            {
+                                "attribute_id": 2,
+                                "name": "Требует видео-фиксации",
+                                "value": "Нет"
+                            },
+                            {
+                                "attribute_id": 13,
+                                "name": "Особенности",
+                                "value": "Раскрученные"
+                            }
+                        ]
                     }
                 ],
                 "_links": {
@@ -159,7 +210,7 @@ class ProductTest extends TestCase
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendGet')
             ->willReturn(json_decode($json, true));
 
         $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));
@@ -173,15 +224,32 @@ class ProductTest extends TestCase
         $this->assertInstanceOf(PaginationLinks::class, $links);
         $this->assertInstanceOf(PaginationMeta::class, $meta);
         $this->assertEquals(3, $meta->getTotalCount());
-        $this->assertEquals("Ex est omnis et", $result->getItems()[0]->getName());
-        $this->assertEquals(1, $result->getItems()[0]->getId());
-        $this->assertEquals(1410.2, $result->getItems()[0]->getPrice());
-        $this->assertEquals(14880, $result->getItems()[0]->getQuantity());
-        $this->assertEquals(16, $result->getItems()[0]->getPurchaseCounter());
-        $this->assertEquals(5, $result->getItems()[0]->getView());
-        $this->assertInstanceOf(GroupItem::class, $result->getItems()[0]->getGroup());
-        $this->assertInstanceOf(CategoryItem::class, $result->getItems()[0]->getCategory());
-        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getItems()[0]->getUrl());
+
+        $product = $result->getItems()[0];
+        $this->assertInstanceOf(\keystore\entities\ProductItem::class, $product);
+
+        $this->assertEquals("Ex est omnis et", $product->getName());
+        $this->assertEquals(1, $product->getId());
+        $this->assertEquals(1410.2, $product->getPrice());
+        $this->assertEquals(14880, $product->getQuantity());
+        $this->assertEquals(16, $product->getPurchaseCounter());
+        $this->assertEquals(5, $product->getView());
+        $this->assertInstanceOf(GroupItem::class, $product->getGroup());
+        $this->assertInstanceOf(CategoryItem::class, $product->getCategory());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $product->getUrl());
+        $this->assertEquals(0, $product->getIsManualOrderDelivery());
+        $this->assertEquals(3060, $product->getGuaranteeTimeSeconds());
+        $this->assertEquals(3.0, $product->getRating());
+        $this->assertEquals(4, $product->getInvalidItemsPercent());
+        $this->assertNull($product->getReplacementTermsPublic());
+
+        $attributes = $product->getAttributes();
+        $this->assertContainsOnlyInstancesOf(\keystore\entities\ProductAttributeValue::class, $attributes);
+
+        $attribute = $attributes[0];
+        $this->assertEquals(2, $attribute->getAttributeId());
+        $this->assertEquals('Требует видео-фиксации', $attribute->getName());
+        $this->assertEquals('Нет', $attribute->getValue());
     }
 
     /**
@@ -190,36 +258,53 @@ class ProductTest extends TestCase
     public function testViewSuccess()
     {
         $json = '{
-          "success": true,
-          "data":     {
-              "id": 3863,
-              "name" : "Lorem Dolor Keys",
-              "miniature": "http://mock/media/products/0143f7df0dffef138edbb25d0b8a0482.jpg",
-              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas accumsan sed eros vel malesuada. Proin laoreet aliquet metus, sit amet laoreet diam. Nullam at dignissim enim. Aliquam malesuada auctor urna id scelerisque. Donec posuere libero in varius euismod. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vel ante lorem. Nulla ac scelerisque felis. Maecenas lacinia non ex vel varius. ",
-              "manual": "",
-              "price": 533.4,
-              "minimum_order": 2,
-              "quantity": 19083,
-              "purchase_counter": 38487,
-              "view": 96512,
-              "group": {
-                "id": 52,
-                "category_id": 28,
-                "name": "Keys"
-              },
-              "category": {
-                "id": 28,
-                "name": "Steam",
-                "icon": "http://mock/media/no-miniature.png"
-              },
-              "url": "http://mock/products/view/quis-et-illum-velit"
+            "success": true,
+            "data":     {
+                "id": 3863,
+                "name" : "Lorem Dolor Keys",
+                "miniature": "http://mock/media/products/0143f7df0dffef138edbb25d0b8a0482.jpg",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas accumsan sed eros vel malesuada. Proin laoreet aliquet metus, sit amet laoreet diam. Nullam at dignissim enim. Aliquam malesuada auctor urna id scelerisque. Donec posuere libero in varius euismod. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vel ante lorem. Nulla ac scelerisque felis. Maecenas lacinia non ex vel varius. ",
+                "manual": "",
+                "price": 533.4,
+                "minimum_order": 2,
+                "quantity": 19083,
+                "purchase_counter": 38487,
+                "view": 96512,
+                "group": {
+                    "id": 52,
+                    "category_id": 28,
+                    "name": "Keys"
+                },
+                "category": {
+                    "id": 28,
+                    "name": "Steam"
+                },
+                "icon": "http://mock/media/no-miniature.png",
+                "is_manual_order_delivery": 1,
+                "url": "http://mock/products/view/quis-et-illum-velit",
+                "replacement_terms_public": "Замена не предусмотрена",
+                "guarantee_time_seconds": 3060,
+                "rating": "3.0",
+                "invalid_items_percent": null,
+                "attributes": [
+                    {
+                        "attribute_id": 2,
+                        "name": "Требует видео-фиксации",
+                        "value": "Нет"
+                    },
+                    {
+                        "attribute_id": 13,
+                        "name": "Особенности",
+                        "value": "Раскрученные"
+                    }
+                ]
             }
         }';
         $mockClient = $this
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendGet')
             ->willReturn(json_decode($json, true));
 
         $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));
@@ -236,5 +321,10 @@ class ProductTest extends TestCase
         $this->assertInstanceOf(GroupItem::class, $result->getGroup());
         $this->assertInstanceOf(CategoryItem::class, $result->getCategory());
         $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $result->getUrl());
+        $this->assertEquals(1, $result->getIsManualOrderDelivery());
+        $this->assertEquals(3060, $result->getGuaranteeTimeSeconds());
+        $this->assertEquals(3.0, $result->getRating());
+        $this->assertNull($result->getInvalidItemsPercent());
+        $this->assertEquals("Замена не предусмотрена", $result->getReplacementTermsPublic());
     }
 }

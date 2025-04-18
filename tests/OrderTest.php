@@ -6,6 +6,7 @@ use keystore\commands\OrderCreateParams;
 use keystore\contracts\HttpClientInterface;
 use keystore\contracts\OrderCreatedInterface;
 use keystore\contracts\OrderDetailInterface;
+use keystore\contracts\OrderStatusInterface;
 use keystore\KeystoreClientFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +34,7 @@ class OrderTest extends TestCase
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendGet')
             ->willReturn(json_decode($json, true));
 
         $params = new OrderCreateParams(1, 5);
@@ -60,12 +61,38 @@ class OrderTest extends TestCase
             ->getMockBuilder(HttpClientInterface::class)
             ->getMock();
         $mockClient
-            ->method('sendData')
+            ->method('sendGet')
             ->willReturn(json_decode($json, true));
 
         $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));
         $result = $service->orderDownload(1458);
 
         $this->assertInstanceOf(OrderDetailInterface::class, $result);
+        $this->assertEquals('http://mock/storage/f2024b14e467833028fc1d198637c015f457de113a45e7e9c867a46c59ad1cfe.txt', $result->getLink());
+    }
+
+    /**
+     * @return void
+     */
+    public function testStatusSuccess()
+    {
+        $json = '{
+            "success": true,
+            "data": {
+                "status": "completed"
+            }
+        }';
+        $mockClient = $this
+            ->getMockBuilder(HttpClientInterface::class)
+            ->getMock();
+        $mockClient
+            ->method('sendGet')
+            ->willReturn(json_decode($json, true));
+
+        $service = KeystoreClientFactory::http($mockClient, new AuthApiKey(""));
+        $result = $service->orderStatus(1458);
+
+        $this->assertInstanceOf(OrderStatusInterface::class, $result);
+        $this->assertEquals(OrderStatusInterface::STATUS_COMPLETED, $result->getStatus());
     }
 }
