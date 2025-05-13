@@ -59,12 +59,14 @@ class ProductTest extends TestCase
                     {
                         "attribute_id": 2,
                         "name": "Требует видео-фиксации",
-                        "value": "Нет"
+                        "value": "Нет",
+                        "value_id": 15
                     },
                     {
                         "attribute_id": 13,
                         "name": "Особенности",
-                        "value": "Раскрученные"
+                        "value": "Раскрученные",
+                        "value_id": 16
                     }
                 ]
               }
@@ -114,27 +116,46 @@ class ProductTest extends TestCase
         $this->assertInstanceOf(\keystore\entities\ProductItem::class, $product);
 
         $this->assertEquals("Iure repudiandae sit et numquam", $product->getName());
+        $this->assertEquals("Iure repudiandae sit et numquam", $product['name']);
         $this->assertEquals(3844, $product->getId());
+        $this->assertEquals(3844, $product['id']);
         $this->assertEquals(123.9, $product->getPrice());
+        $this->assertEquals(123.9, $product['price']);
         $this->assertEquals(8816, $product->getQuantity());
+        $this->assertEquals(8816, $product['quantity']);
         $this->assertEquals(55625, $product->getPurchaseCounter());
+        $this->assertEquals(55625, $product['purchase_counter']);
         $this->assertEquals(0, $product->getView());
+        $this->assertEquals(0, $product['view']);
         $this->assertInstanceOf(GroupItem::class, $product->getGroup());
         $this->assertInstanceOf(CategoryItem::class, $product->getCategory());
         $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $product->getUrl());
+        $this->assertEquals("http://mock/products/view/quis-et-illum-velit", $product['url']);
         $this->assertEquals(1, $product->getIsManualOrderDelivery());
+        $this->assertEquals(1, $product['is_manual_order_delivery']);
         $this->assertEquals(3060, $product->getGuaranteeTimeSeconds());
+        $this->assertEquals(3060, $product['guarantee_time_seconds']);
         $this->assertEquals(3.0, $product->getRating());
+        $this->assertEquals(3.0, $product['rating']);
         $this->assertEquals(2, $product->getInvalidItemsPercent());
+        $this->assertEquals(2, $product['invalid_items_percent']);
         $this->assertNull($product->getReplacementTermsPublic());
+        $this->assertNull($product['replacement_terms_public']);
 
         $attributes = $product->getAttributes();
+        $attributesAsArray = $product['attributes'];
+        $this->assertEquals($attributes, $attributesAsArray);
         $this->assertContainsOnlyInstancesOf(\keystore\entities\ProductAttributeValue::class, $attributes);
 
         $attribute = $attributes[0];
         $this->assertEquals(2, $attribute->getAttributeId());
+        $this->assertEquals(2, $attribute['attribute_id']);
         $this->assertEquals('Требует видео-фиксации', $attribute->getName());
+        $this->assertEquals('Требует видео-фиксации', $attribute['name']);
         $this->assertEquals('Нет', $attribute->getValue());
+        $this->assertEquals('Нет', $attribute['value']);
+        $this->assertEquals(15, $attribute->getValueId());
+        $this->assertEquals(15, $attribute['value_id']);
     }
 
     /**
@@ -290,12 +311,14 @@ class ProductTest extends TestCase
                     {
                         "attribute_id": 2,
                         "name": "Требует видео-фиксации",
-                        "value": "Нет"
+                        "value": "Нет",
+                        "value_id": 15
                     },
                     {
                         "attribute_id": 13,
                         "name": "Особенности",
-                        "value": "Раскрученные"
+                        "value": "Раскрученные",
+                        "value_id": 16
                     }
                 ]
             }
@@ -326,5 +349,11 @@ class ProductTest extends TestCase
         $this->assertEquals(3.0, $result->getRating());
         $this->assertNull($result->getInvalidItemsPercent());
         $this->assertEquals("Замена не предусмотрена", $result->getReplacementTermsPublic());
+        $this->assertContainsOnlyInstancesOf(\keystore\entities\ProductAttributeValue::class, $result->getAttributes());
+
+        $attribute = $result->getAttributes()[0];
+        $this->assertEquals(2, $attribute->getAttributeId());
+        $this->assertEquals('Требует видео-фиксации', $attribute->getName());
+        $this->assertEquals('Нет', $attribute->getValue());
     }
 }

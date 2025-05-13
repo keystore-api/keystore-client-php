@@ -284,7 +284,15 @@ class ProductDetailResponse extends AbstractHttpResponse implements ProductDetai
      */
     protected function setAttributes($value)
     {
-        $this->attributes = $value;
+        $this->attributes = array_map(
+            /**
+             * @param array $attributeValue
+             */
+            static function($attributeValue){
+                return ProductAttributeValue::fromArray($attributeValue);
+            },
+            $value
+        );
     }
 
     /**
