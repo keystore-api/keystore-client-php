@@ -28,6 +28,11 @@ class OrderCreatedResponse extends AbstractHttpResponse implements OrderCreatedI
     protected $id;
 
     /**
+     * @var bool
+     */
+    protected $idempotence = false;
+
+    /**
      * @inheritDoc
      */
     public function getStatus()
@@ -58,4 +63,14 @@ class OrderCreatedResponse extends AbstractHttpResponse implements OrderCreatedI
     {
         return $this->status === self::STATUS_OK;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isIdempotence()
+    {
+        return $this->idempotence;
+    }
+
+
 }

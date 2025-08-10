@@ -44,6 +44,15 @@ $baseUrl = 'https://<domain>';
 $service = KeystoreClientFactory::create($baseUrl, $key);
 ```
 
+### Список атрибутов
+
+```php
+...
+
+$service = KeystoreClientFactory::create($baseUrl, $key);
+$result = $service->attributeList();
+```
+
 ### Список категорий
 
 ```php
@@ -163,10 +172,17 @@ $result = $service->userBalance();
 
 ### Создание заказа
 
+Опционально можно передать `idempotenceId` - обычно это ID заказа в вашей системе.
+
+Если заказ от вас с таким idempotenceId уже создан,
+то вместо создания нового будет возвращена информация о существующем заказе.
+
+
 ```php
 ...
 
 $params = new OrderCreateParams(1, 5);
+$params->setIdempotenceId('your-order-id');
 
 $service = KeystoreClientFactory::create($baseUrl, $key);
 $result = $service->orderCreate($params);

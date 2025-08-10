@@ -25,32 +25,50 @@ class OrderStatusResponse extends AbstractHttpResponse implements OrderStatusInt
         return $this->status;
     }
 
-    public function isUnpaid(): bool
+    /**
+     * @return bool
+     */
+    public function isUnpaid()
     {
         return $this->status === OrderStatusInterface::STATUS_UNPAID;
     }
 
-    public function isInProcess(): bool
+    /**
+     * @return bool
+     */
+    public function isInProcess()
     {
         return $this->status === OrderStatusInterface::STATUS_IN_PROCESS;
     }
 
-    public function isCompleted(): bool
+    /**
+     * @return bool
+     */
+    public function isCompleted()
     {
         return $this->status === OrderStatusInterface::STATUS_COMPLETED;
     }
 
-    public function isCanceled(): bool
+    /**
+     * @return bool
+     */
+    public function isCanceled()
     {
         return $this->status === OrderStatusInterface::STATUS_CANCELED;
     }
 
-    public function isError(): bool
+    /**
+     * @return bool
+     */
+    public function isError()
     {
         return $this->status === OrderStatusInterface::STATUS_ERROR;
     }
 
-    public function isRefund(): bool
+    /**
+     * @return bool
+     */
+    public function isRefund()
     {
         return $this->status === OrderStatusInterface::STATUS_REFUND;
     }

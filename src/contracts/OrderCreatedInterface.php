@@ -37,4 +37,12 @@ interface OrderCreatedInterface extends ResultInterface, OrderDownloadInterface
      * @return boolean
      */
     public function isOk();
+
+    /**
+     * Если при создании заказа был передан `idempotence_id`, который уже существует, в ответе вернётся
+     * `idempotence: true` и данные существующего заказа.
+     *
+     * @return boolean
+     */
+    public function isIdempotence();
 }

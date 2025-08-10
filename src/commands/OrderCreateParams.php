@@ -33,6 +33,14 @@ class OrderCreateParams extends AbstractRequestParams
     protected $sendEmailCopy;
 
     /**
+     * Уникальный идентификатор запроса, обычно номер заказа в вашей системе.
+     * Если задан и вы уже создавали ранее заказ с таким идентификатором,
+     * то новый заказ не будет создан, а вернется информация о существующем заказе.
+     * @var string|null
+     */
+    protected $idempotenceId;
+
+    /**
      * @param int $productId
      * @param int $quantity
      */
@@ -68,6 +76,19 @@ class OrderCreateParams extends AbstractRequestParams
         Assert::unStrictBoolean("Send Email Copy", $sendEmailCopy);
         $this->sendEmailCopy = (bool)$sendEmailCopy;
 
+        return $this;
+    }
+
+    /**
+     * @param string|null $idempotenceId
+     * @return OrderCreateParams
+     */
+    public function setIdempotenceId($idempotenceId)
+    {
+        if ($idempotenceId !== null) {
+            Assert::string("Idempotence ID", $idempotenceId);
+        }
+        $this->idempotenceId = $idempotenceId;
         return $this;
     }
 }
